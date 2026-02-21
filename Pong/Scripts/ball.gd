@@ -1,48 +1,48 @@
-extends RigidBody2D
+extends CharacterBody2D
 
-const speed := 400.0
-var last_dir_x := 1   # remembers direction safely
+var speed := 400.0
+const SPEED_INCREASE := 30.0
+const MAX_SPEED := 900.0
+var start_position: Vector2
+@onready var hit_sound = $HitSound
 
 func _ready():
-	gravity_scale = 0
-	linear_damp = 0
-	angular_damp = 0
+	start_position = global_position
 	launch()
 
 func launch():
-	last_dir_x = [-1, 1].pick_random()
-	var dir_y = randf_range(-0.4, 0.4)
-	linear_velocity = Vector2(last_dir_x, dir_y).normalized() * speed
+	speed = 400.0
+	velocity = Vector2(
+		[-1, 1].pick_random(),
+		randf_range(-0.4, 0.4)
+	).normalized() * speed
 
-func _on_body_entered(body):
-	if body.name == "player" or body.name == "player2":
-		linear_velocity.x = -linear_velocity.x
-		global_position.x += sign(linear_velocity.x) * 5
-		
-func _physics_process(_delta):
-	linear_velocity = linear_velocity.normalized() * speed
-	
-func _integrate_forces(state):
-	for i in range(state.get_contact_count()):
-		var paddle = state.get_contact_collider_object(i)
-		if paddle and (paddle.name == "player" or paddle.name == "player2"):
 
-			# Direction: left or right
-			var dir_x = sign(linear_velocity.x) * -1
+func _physics_process(delta):
+	var collision = move_and_collide(velocity * delta)
 
-			# Distance from paddle center
-			var hit_offset = global_position.y - paddle.global_position.y
+	if collision:
+		var collider = collision.get_collider()
 
-			# Normalize (-1 to 1)
-			var half_height = paddle.get_node("CollisionShape2D").shape.size.y / 2
+		if collider.name == "player" or collider.name == "player2":
+
+			# increase speed
+			hit_sound.play()
+			speed = min(speed + SPEED_INCREASE, MAX_SPEED)
+
+			# calculate hit offset
+			var hit_offset = global_position.y - collider.global_position.y
+			var half_height = collider.get_node("CollisionShape2D").shape.size.y / 2
 			var normalized_offset = clamp(hit_offset / half_height, -1, 1)
 
-			# Max bounce angle (in radians)
 			var max_angle = deg_to_rad(60)
-
-			# Final angle
 			var angle = normalized_offset * max_angle
 
-			# New velocity direction
-			var direction = Vector2(dir_x, sin(angle)).normalized()
-			linear_velocity = direction * speed
+			var dir_x = -sign(velocity.x)
+			velocity = Vector2(dir_x, sin(angle)).normalized() * speed
+
+		else:
+			velocity = velocity.bounce(collision.get_normal())
+			
+				
+			
