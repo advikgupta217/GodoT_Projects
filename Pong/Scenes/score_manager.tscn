@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://bjhf65ao30l1q"]
+
+[ext_resource type="Script" uid="uid://bgbg380x4rvhg" path="res://Scripts/score_manager.gd" id="1_h52yi"]
+
+[node name="ScoreManager" type="Node2D" unique_id=243665812]
+script = ExtResource("1_h52yi")

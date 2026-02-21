@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://chbiy38n7t4wq"]
+
+[ext_resource type="Texture2D" uid="uid://d3qm6pgbn5e1h" path="res://Assets/arts/BallMotion.png" id="1_q22xk"]
+[ext_resource type="Script" uid="uid://c1ev88umesn36" path="res://Scripts/BallTrail.gd" id="2_4ckp0"]
+
+[node name="Node2D" type="Node2D" unique_id=957863446]
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1731277158]
+texture = ExtResource("1_q22xk")
+script = ExtResource("2_4ckp0")

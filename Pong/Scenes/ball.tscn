@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://bkgsgplmdrdk4"]
+
+[ext_resource type="Texture2D" uid="uid://b6sod08b7rhpf" path="res://Assets/arts/Ball.png" id="1_d60mj"]
+[ext_resource type="Script" uid="uid://ve6b7bu6h7wt" path="res://Scripts/ball.gd" id="1_ij5cq"]
+[ext_resource type="Shader" uid="uid://cdfihk7qti84c" path="res://Scenes/ball.gdshader" id="2_376qj"]
+[ext_resource type="AudioStream" uid="uid://bxps86csecmmj" path="res://Assets/mixkit-game-ball-tap-2073.wav" id="4_yk4cr"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_yk4cr"]
+shader = ExtResource("2_376qj")
+shader_parameter/neon_color = Color(0, 1, 1, 1)
+shader_parameter/glow_strength = 100.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ij5cq"]
+radius = 15.0
+
+[node name="ball" type="CharacterBody2D" unique_id=32983626]
+script = ExtResource("1_ij5cq")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1762927631]
+material = SubResource("ShaderMaterial_yk4cr")
+texture = ExtResource("1_d60mj")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1519830527]
+shape = SubResource("CircleShape2D_ij5cq")
+
+[node name="HitSound" type="AudioStreamPlayer2D" parent="." unique_id=1886294061]
+stream = ExtResource("4_yk4cr")
